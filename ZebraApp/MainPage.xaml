@@ -14,9 +14,11 @@
                 SemanticProperties.Description="dot net bot in a hovercraft number nine" />
 
             <Label
-                Text="Hello, World!"
+                Text="Skibidi!"
                 Style="{StaticResource Headline}"
-                SemanticProperties.HeadingLevel="Level1" />
+                SemanticProperties.HeadingLevel="Level1"
+                x:Name="OutputLabel"
+                />
 
             <Label
                 Text="Welcome to &#10;.NET Multi-platform App UI"

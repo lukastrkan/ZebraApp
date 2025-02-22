@@ -1,17 +1,16 @@
-using System.Text;
 using Android.Content;
-using Android.OS;
 using CommunityToolkit.Mvvm.Messaging;
+using ZebraApp.Entity;
 
 namespace ZebraApp.Zebra;
 
 [BroadcastReceiver(Enabled = true, Exported = true)]
-public class DWIntentReceiver : BroadcastReceiver
+public class ZebraBroadcastReceiver : BroadcastReceiver
 {
     public override void OnReceive(Context? context, Intent? intent)
     {
         // Nemám data - rychle pryč
-        if (intent.Extras == null) return;
+        if (intent?.Extras == null) return;
         if (!intent.HasExtra("com.symbol.datawedge.data_string")) return;
         
         var barcode = intent.GetStringExtra("com.symbol.datawedge.data_string");
@@ -19,7 +18,7 @@ public class DWIntentReceiver : BroadcastReceiver
 
         if (barcode != null)
         {
-            WeakReferenceMessenger.Default.Send(barcode);
+            WeakReferenceMessenger.Default.Send(new Message<string>(MessageType.BARCODE, barcode));
         }
     }
 }
