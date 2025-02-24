@@ -1,5 +1,8 @@
 ﻿using CommunityToolkit.Maui;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
+using ZebraApp.Api.Api;
+using ZebraApp.Services;
 
 namespace ZebraApp;
 
@@ -16,8 +19,16 @@ public static class MauiProgram
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
             });
-        
-        
+
+        builder.Services.AddSingleton<ApiService>();
+
+        Microsoft.Maui.Handlers.EntryHandler.Mapper.AppendToMapping("NoKeyboardEntry", ((handler, entry) =>
+        {
+#if ANDROID
+            handler.PlatformView.ShowSoftInputOnFocus = false;
+#endif
+        }));
+
 
 #if DEBUG
         builder.Logging.AddDebug();

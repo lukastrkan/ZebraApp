@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ZebraApp.UI.FilamentItem">
+    <Grid ColumnDefinitions="0.3*, 0.7*" Padding="10">
+        <!-- Ikona filamentu -->
+        <Image x:Name="FilamentIcon"
+               Aspect="AspectFit"
+               Grid.Column="0"
+               WidthRequest="50"
+               HeightRequest="50" />
+
+        <!-- Informace o filamentu -->
+        <VerticalStackLayout Grid.Column="1" Spacing="2">
+            <Label x:Name="FilamentName"
+                   FontSize="18"
+                   FontAttributes="Bold" />
+            <Label x:Name="FilamentManufacturer"
+                   FontSize="14"
+                   TextColor="Gray" />
+            <Label x:Name="FilamentMaterial"
+                   FontSize="14"
+                   FontAttributes="Italic" />
+        </VerticalStackLayout>
+    </Grid>
+</ContentView>

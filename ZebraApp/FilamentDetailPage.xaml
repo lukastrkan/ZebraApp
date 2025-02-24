@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ZebraApp.FilamentDetailPage">
+    <ContentPage.Content>
+        <VerticalStackLayout Padding="20">
+            <Label x:Name="FilamentId"></Label>
+            <Image x:Name="FilamentIcon" Aspect="AspectFit" WidthRequest="100" HeightRequest="100" />
+            <Label x:Name="FilamentName" FontSize="24" FontAttributes="Bold" />
+            <Label x:Name="FilamentManufacturer" FontSize="18" TextColor="Gray" />
+            <Label x:Name="FilamentMaterial" FontSize="18" FontAttributes="Italic" />
+        </VerticalStackLayout>
+    </ContentPage.Content>
+</ContentPage>

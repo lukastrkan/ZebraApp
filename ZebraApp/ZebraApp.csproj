@@ -65,4 +65,8 @@
         <PackageReference Include="Microsoft.Maui.Core" Version="9.0.40" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\ZebraApp.Api\ZebraApp.Api.csproj" />
+    </ItemGroup>
+
 </Project>
