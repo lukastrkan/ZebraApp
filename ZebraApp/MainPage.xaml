@@ -3,14 +3,16 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:ui="clr-namespace:ZebraApp.UI"
+             xmlns:viewModel="clr-namespace:ZebraApp.ViewModel"
              HideSoftInputOnTapped="True"
              x:Class="ZebraApp.MainPage">
 
     <RefreshView IsRefreshing="{Binding IsRefreshing}"
-                 Command="{Binding RefreshCommand}">
-        <CollectionView ItemsSource="{Binding Filaments}" SelectionMode="Single" SelectionChanged="OnFilamentSelected">
+                 Command="{Binding RefreshCommand}" x:DataType="viewModel:FilamentListModel">
+        <CollectionView ItemsSource="{Binding Filaments}" SelectionMode="Single"
+                        SelectionChanged="OnFilamentSelected">
             <CollectionView.ItemTemplate>
-                <DataTemplate>
+                <DataTemplate x:DataType="viewModel:FilamentModel">
                     <ui:FilamentItem IconSource="{Binding Icon}"
                                      Name="{Binding Name}"
                                      Manufacturer="{Binding Manufacturer}"
