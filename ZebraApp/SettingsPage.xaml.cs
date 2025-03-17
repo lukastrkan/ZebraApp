@@ -13,7 +13,7 @@ namespace ZebraApp;
 
 public partial class SettingsPage : ContentPage
 {
-    public string Url { get; set; }
+    private string Url { get; set; } = "";
     ApiService _apiService;
 
     public SettingsPage(ApiService apiService)
