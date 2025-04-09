@@ -14,4 +14,5 @@ public partial class FilamentModel : ObservableObject
     [ObservableProperty] private decimal _weight = 0;
     [ObservableProperty] private decimal _usedWeight = 0;
     [ObservableProperty] private decimal? _price = 0;
+    [ObservableProperty] private string _location = "";
 }

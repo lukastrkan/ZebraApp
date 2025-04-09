@@ -7,9 +7,13 @@
              HideSoftInputOnTapped="True"
              x:Class="ZebraApp.MainPage">
 
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Filtr" Clicked="OnToolbarItemClicked"></ToolbarItem>
+    </ContentPage.ToolbarItems>
+
     <RefreshView IsRefreshing="{Binding IsRefreshing}"
                  Command="{Binding RefreshCommand}" x:DataType="viewModel:FilamentListModel">
-        <CollectionView ItemsSource="{Binding Filaments}" SelectionMode="Single"
+        <CollectionView ItemsSource="{Binding Filaments}" SelectionMode="Single" EmptyView="No filaments found"
                         SelectionChanged="OnFilamentSelected">
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="viewModel:FilamentModel">

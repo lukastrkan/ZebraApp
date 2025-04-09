@@ -1,14 +1,6 @@
-﻿//using CommunityToolkit.Maui
-
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using CommunityToolkit.Maui.Alerts;
-using CommunityToolkit.Mvvm.Messaging;
+﻿using CommunityToolkit.Mvvm.Messaging;
+using Slugify;
 using ZebraApp.Entity;
-using CommunityToolkit.Maui.Core.Platform;
-using ZebraApp.Api.Api;
-using ZebraApp.Api.Client;
-using ZebraApp.Api.Model;
 using ZebraApp.Services;
 using ZebraApp.ViewModel;
 
@@ -17,7 +9,6 @@ namespace ZebraApp;
 public partial class MainPage : ContentPage
 {
     private FilamentListModel FilamentListModel { get; set; }
-
     private FilamentModel? SelectedFilament { get; set; }
     private string? SelectedLocation;
 
@@ -74,6 +65,18 @@ public partial class MainPage : ContentPage
         {
             await Navigation.PushAsync(new FilamentDetailPage(filament));
             ((CollectionView)sender).SelectedItem = null;
+        }
+    }
+
+    private async void OnToolbarItemClicked(object sender, EventArgs e)
+    {
+        string action =
+            await DisplayActionSheet("Vyberte možnost", "Zrušit", null, FilamentListModel.Locations.ToArray());
+        if (action != "Zrušit")
+        {
+            var slugHelper = new SlugHelper();
+            FilamentListModel.Location = slugHelper.GenerateSlug(action);
+            //FilamentListModel.RefreshCommand.Execute(null);
         }
     }
 }

@@ -15,6 +15,7 @@ public static class MauiProgram
         builder
             .UseMauiApp<App>()
             .UseMauiCommunityToolkit()
+            .UseMauiCommunityToolkit()
             .ConfigureFonts(fonts =>
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -46,7 +47,7 @@ public static class MauiProgram
         Microsoft.Maui.Handlers.EntryHandler.Mapper.AppendToMapping("NoKeyboardEntry", ((handler, entry) =>
         {
 #if ANDROID
-            handler.PlatformView.ShowSoftInputOnFocus = false;
+            //handler.PlatformView.ShowSoftInputOnFocus = false;
 #endif
         }));
 
