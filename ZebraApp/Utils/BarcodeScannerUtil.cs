@@ -8,11 +8,6 @@ public class BarcodeScannerUtil
     {
         if (barcode.Length > 0)
         {
-            if (barcode.Contains('/')) //TODO: check for spool in url
-            {
-                return new Barcode(barcode.Split('/').Last(), BarcodeType.FILAMENT);
-            }
-
             if (barcode.Contains("web+spoolman:s-"))
             {
                 return new Barcode(barcode.Replace("web+spoolman:s-", ""), BarcodeType.FILAMENT);
@@ -26,4 +21,6 @@ public class BarcodeScannerUtil
 
         return null;
     }
+    
+    
 }

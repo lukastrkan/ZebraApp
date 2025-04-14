@@ -10,56 +10,49 @@ public partial class MainPage : ContentPage
 {
     private FilamentListModel FilamentListModel { get; set; }
     private FilamentModel? SelectedFilament { get; set; }
-    private string? SelectedLocation;
 
-    private readonly BarcodeScannerUtil _barcodeScannerUtil;
-
-    private readonly IServiceProvider _serviceProvider;
-
-    public MainPage(IServiceProvider serviceProvider, ApiService apiService, FilamentListModel model,
-        BarcodeScannerUtil barcodeScannerUtil)
+    public MainPage(FilamentListModel model)
     {
         InitializeComponent();
-        _barcodeScannerUtil = barcodeScannerUtil;
-        _serviceProvider = serviceProvider;
 
         BindingContext = model;
-
-        FilamentListModel = new FilamentListModel(apiService);
+        FilamentListModel = model;
 
         WeakReferenceMessenger.Default.Register<Message<string>>(this, (recipient, message) =>
         {
-            if (Shell.Current.CurrentPage != this) return;
-            if (message.Type != MessageType.BARCODE) return;
-
-            var barcode = message.Data.ToString();
-            if (barcode.Length <= 0) return;
-
-            var processed = _barcodeScannerUtil.ProcessBarcode(barcode);
-            if (processed is null) return;
-
-
-            if (processed.Type == BarcodeType.FILAMENT)
+            if (message.Type == MessageType.LOCATION)
             {
-                SelectedFilament = FilamentListModel.Filaments.FirstOrDefault(f => f.Id.ToString() == processed.Code);
-                if (SelectedFilament is null) return;
-
-                MainThread.BeginInvokeOnMainThread(() =>
-                    Navigation.PushAsync(new FilamentDetailPage(SelectedFilament)));
-
+                if (Shell.Current.CurrentPage is FilamentDetailPage)
+                {
+                    MainThread.InvokeOnMainThreadAsync(async () =>
+                    {
+                        await Navigation.PopToRootAsync(false);
+                    });
+                }
+                
+                FilamentListModel.Location = message.Data;
                 return;
             }
 
-            if (processed.Type == BarcodeType.LOCATION)
+            if (message.Type == MessageType.FILAMENT)
             {
-                FilamentListModel.Location = processed.Code;
-                FilamentListModel.RefreshCommand.Execute(null);
-                return;
+                SelectedFilament = FilamentListModel.FindFilament(message.Data);
+                if (SelectedFilament is null) return;
+                
+                MainThread.InvokeOnMainThreadAsync(async () =>
+                {
+                    if (Shell.Current.CurrentPage is FilamentDetailPage)
+                    {
+                        await Navigation.PopToRootAsync(false);
+                    }
+                    
+                    await Navigation.PushAsync(new FilamentDetailPage(SelectedFilament), false);
+                });
             }
         });
     }
 
-    public async void OnFilamentSelected(object sender, SelectionChangedEventArgs e)
+    private async void OnFilamentSelected(object sender, SelectionChangedEventArgs e)
     {
         if (e.CurrentSelection.FirstOrDefault() is FilamentModel filament)
         {
@@ -76,7 +69,6 @@ public partial class MainPage : ContentPage
         {
             var slugHelper = new SlugHelper();
             FilamentListModel.Location = slugHelper.GenerateSlug(action);
-            //FilamentListModel.RefreshCommand.Execute(null);
         }
     }
 }

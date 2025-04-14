@@ -6,7 +6,11 @@
              x:Class="ZebraApp.FilamentDetailPage"
              x:DataType="viewModel:FilamentModel"
              Title="{Binding Name}">
-
+    
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Přesunout" Clicked="MenuItem_OnClicked"/>
+    </ContentPage.ToolbarItems>
+    
     <Grid Padding="20" RowSpacing="10" ColumnSpacing="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />

@@ -13,11 +13,6 @@
         ContentTemplate="{DataTemplate local:MainPage}"
         Route="MainPage" />
 
-    <ShellContent
-        Title="Test"
-        ContentTemplate="{DataTemplate local:Test}"
-        Route="Test" />
-
     <ShellContent Title="Settings"
                   Route="SettingsPage"
                   ContentTemplate="{DataTemplate local:SettingsPage}"/>

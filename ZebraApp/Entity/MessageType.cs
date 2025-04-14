@@ -2,6 +2,7 @@ namespace ZebraApp.Entity;
 
 public enum MessageType
 {
-    BARCODE,
-    SETTINGS
+    SETTINGS,
+    LOCATION,
+    FILAMENT,
 }

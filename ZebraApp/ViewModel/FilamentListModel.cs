@@ -10,26 +10,28 @@ namespace ZebraApp.ViewModel;
 
 public partial class FilamentListModel : ObservableObject
 {
-    private List<FilamentModel> _filaments = new List<FilamentModel>(); //TODO: Change list and then prop NotifyPropertyChangedFor with dynamic filtering
+    private List<FilamentModel> AllFilaments { get; } = new();
 
-    [ObservableProperty] private bool _isRefreshing = false;
+    [ObservableProperty] private bool _isRefreshing = true;
 
     [ObservableProperty] private Command _refreshCommand;
     [ObservableProperty] private ObservableCollection<string> _locations = [];
-    
-    [NotifyPropertyChangedFor(nameof(Filaments))]
-    [ObservableProperty] private string? _location;
-    
+
+    [NotifyPropertyChangedFor(nameof(Filaments))] [ObservableProperty]
+    private string? _location;
+
     public ObservableCollection<FilamentModel> Filaments
     {
         get
         {
             if (string.IsNullOrEmpty(Location))
             {
-                return new ObservableCollection<FilamentModel>(_filaments);
+                return new ObservableCollection<FilamentModel>(AllFilaments);
             }
+
             var slugify = new SlugHelper();
-            return new ObservableCollection<FilamentModel>(_filaments.FindAll(f => slugify.GenerateSlug(f.Location) == slugify.GenerateSlug(Location)));
+            return new ObservableCollection<FilamentModel>(AllFilaments.FindAll(f =>
+                slugify.GenerateSlug(f.Location) == slugify.GenerateSlug(Location)));
         }
     }
 
@@ -48,20 +50,16 @@ public partial class FilamentListModel : ObservableObject
 
     public async Task RefreshData()
     {
-        Snackbar.Make("Aktualizuji data").Show();
+        await Snackbar.Make("Aktualizuji data").Show();
         IsRefreshing = true;
 
-        // await Task.WhenAll(
-        //     LoadFilaments(),
-        //     LoadLocations()
-        // );
-        
-        await LoadFilaments();
-        await LoadLocations();
+        await Task.WhenAll(
+            LoadFilaments(),
+            LoadLocations()
+        );
 
         IsRefreshing = false;
 
-        //Refresh view
         OnPropertyChanged(nameof(Filaments));
     }
 
@@ -91,6 +89,7 @@ public partial class FilamentListModel : ObservableObject
 
     private async Task LoadFilaments()
     {
+        AllFilaments.Clear();
         try
         {
             foreach (var spool in await _apiService.SpoolApi.FindSpoolSpoolGetAsync())
@@ -107,8 +106,8 @@ public partial class FilamentListModel : ObservableObject
                     Price = spool.Price,
                     Location = spool.Location,
                 };
-                
-                _filaments.Add(filament);
+
+                AllFilaments.Add(filament);
             }
         }
         catch (Exception e)
@@ -118,6 +117,12 @@ public partial class FilamentListModel : ObservableObject
 
             SentrySdk.CaptureException(e);
         }
+
         OnPropertyChanged(nameof(Filaments));
+    }
+
+    public FilamentModel? FindFilament(string code)
+    {
+        return AllFilaments.FirstOrDefault(f => f.Id.ToString() == code);
     }
 }

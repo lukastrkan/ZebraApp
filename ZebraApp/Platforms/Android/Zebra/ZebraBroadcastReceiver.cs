@@ -12,13 +12,23 @@ public class ZebraBroadcastReceiver : BroadcastReceiver
         // Nemám data - rychle pryč
         if (intent?.Extras == null) return;
         if (!intent.HasExtra("com.symbol.datawedge.data_string")) return;
-        
+
         var barcode = intent.GetStringExtra("com.symbol.datawedge.data_string");
         Console.WriteLine("Barcode: " + barcode);
 
-        if (barcode != null)
+        if (barcode is null) return;
+
+        if (barcode.Length > 0)
         {
-            WeakReferenceMessenger.Default.Send(new Message<string>(MessageType.BARCODE, barcode));
+            if (barcode.Contains("web+spoolman:s-"))
+            {
+                WeakReferenceMessenger.Default.Send(new Message<string>(MessageType.FILAMENT, barcode.Replace("web+spoolman:s-", "")));
+            }
+
+            if (barcode.Contains("web+spoolman:l-"))
+            {
+                WeakReferenceMessenger.Default.Send(new Message<string>(MessageType.LOCATION, barcode.Replace("web+spoolman:l-", "")));
+            }
         }
     }
 }
