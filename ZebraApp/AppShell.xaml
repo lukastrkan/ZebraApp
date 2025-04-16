@@ -7,14 +7,13 @@
     xmlns:local="clr-namespace:ZebraApp"
     FlyoutBehavior="Disabled"
     TabBarIsVisible="True"
-    Title="ZebraApp"
-    >
+    Title="ZebraApp">
 
     <TabBar>
         <ShellContent
             Title="Domů"
             Icon="list.png"
-            Route="MainPage" 
+            Route="MainPage"
             ContentTemplate="{DataTemplate local:MainPage}" />
 
         <ShellContent Title="Nastavení"

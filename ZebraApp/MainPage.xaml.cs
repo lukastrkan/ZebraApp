@@ -43,7 +43,7 @@ public partial class MainPage : ContentPage
                         await Navigation.PopToRootAsync(false);
                     }
 
-                    await Navigation.PushAsync(new FilamentDetailPage(SelectedSpool), false);
+                    await Navigation.PushAsync(new FilamentDetailPage(SelectedSpool));
                 });
             }
         });
@@ -53,7 +53,7 @@ public partial class MainPage : ContentPage
     {
         if (e.CurrentSelection.FirstOrDefault() is Spool spool)
         {
-            await Navigation.PushAsync(new FilamentDetailPage(spool), false);
+            await Navigation.PushAsync(new FilamentDetailPage(spool));
             ((CollectionView)sender).SelectedItem = null;
         }
     }
