@@ -7,13 +7,13 @@ namespace ZebraApp;
 
 public partial class FilamentDetailPage : ContentPage
 {
-    public FilamentModel FilamentModel { get; set; }
+    private Spool Spool { get; set; }
 
-    public FilamentDetailPage(FilamentModel filamentModel)
+    public FilamentDetailPage(Spool spool)
     {
         InitializeComponent();
-        FilamentModel = filamentModel;
-        BindingContext = FilamentModel;
+        Spool = spool;
+        BindingContext = Spool;
 
         WeakReferenceMessenger.Default.Register<Message<string>>(this, (recipient, message) =>
         {
@@ -26,6 +26,7 @@ public partial class FilamentDetailPage : ContentPage
 
     private void MenuItem_OnClicked(object? sender, EventArgs e)
     {
-        this.ShowPopupAsync(new MoveFilamentPopup());
+        var view = new MoveFilamentView(Spool);
+        Navigation.PushAsync(view, false);
     }
 }

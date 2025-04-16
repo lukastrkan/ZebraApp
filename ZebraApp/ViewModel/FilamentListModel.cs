@@ -5,33 +5,34 @@ using CommunityToolkit.Mvvm.Messaging;
 using Slugify;
 using ZebraApp.Entity;
 using ZebraApp.Services;
+using ZebraApp.Utils;
 
 namespace ZebraApp.ViewModel;
 
 public partial class FilamentListModel : ObservableObject
 {
-    private List<FilamentModel> AllFilaments { get; } = new();
+    private List<Spool> AllSpools { get; set; } = new();
 
     [ObservableProperty] private bool _isRefreshing = true;
 
     [ObservableProperty] private Command _refreshCommand;
-    [ObservableProperty] private ObservableCollection<string> _locations = [];
+    [ObservableProperty] private ObservableCollection<Filter> _filters = [];
 
     [NotifyPropertyChangedFor(nameof(Filaments))] [ObservableProperty]
-    private string? _location;
+    private Filter? _filter = null;
 
-    public ObservableCollection<FilamentModel> Filaments
+    public ObservableCollection<Spool> Filaments
     {
         get
         {
-            if (string.IsNullOrEmpty(Location))
+            if (Filter?.FilterValue == "vse")
             {
-                return new ObservableCollection<FilamentModel>(AllFilaments);
+                return new ObservableCollection<Spool>(AllSpools);
             }
 
             var slugify = new SlugHelper();
-            return new ObservableCollection<FilamentModel>(AllFilaments.FindAll(f =>
-                slugify.GenerateSlug(f.Location) == slugify.GenerateSlug(Location)));
+            return new ObservableCollection<Spool>(AllSpools.FindAll(f =>
+                slugify.GenerateSlug(f.Location) == Filter?.FilterValue));
         }
     }
 
@@ -42,15 +43,15 @@ public partial class FilamentListModel : ObservableObject
         _apiService = apiService;
         RefreshCommand = new Command(async void () => await RefreshData());
 
-        WeakReferenceMessenger.Default.Register<Message<bool>>(this, (recipient, message) =>
-            Task.Run((() => RefreshCommand.Execute(null))).GetAwaiter().GetResult());
+        WeakReferenceMessenger.Default.Register<Message<bool>>(this, async (recipient, message) => await RefreshData());
+        WeakReferenceMessenger.Default.Register<Message<Spool>>(this, async (recipient, message) => await RefreshData());
 
         RefreshCommand.Execute(null);
     }
 
     public async Task RefreshData()
     {
-        await Snackbar.Make("Aktualizuji data").Show();
+        //await Snackbar.Make("Aktualizuji data").Show();
         IsRefreshing = true;
 
         await Task.WhenAll(
@@ -65,52 +66,37 @@ public partial class FilamentListModel : ObservableObject
 
     private async Task LoadLocations()
     {
-        //Placeholder values
-        Locations = new ObservableCollection<string>()
+        Filters.Clear();
+        foreach (var location in await _apiService.GetSpoolLocationsAsync())
         {
-            "Police", "Tiskárna"
-        };
+            Filters.Add(new Filter(location));
+        }
 
-        // TODO: Uncomment when API is ready
-        // Locations.Clear();
-        // try
-        // {
-        //     var locations = await _apiService.OtherApi.FindLocationsLocationGetAsync();
-        //     foreach (var location in locations)
-        //     {
-        //         Locations.Add(location);
-        //     }
-        // }
-        // catch (Exception e)
-        // {
-        //     SentrySdk.CaptureException(e);
-        // }
+        if (Filters.Count > 0)
+        {
+            if (Filter is null)
+            {
+                Filter = Filters[0];
+            }
+            else
+            {
+                var filter = Filters.FirstOrDefault(f => f.Name == Filter?.Name);
+                if (filter is not null)
+                {
+                    Filter = filter;
+                }
+            }
+        }
     }
 
     private async Task LoadFilaments()
     {
-        AllFilaments.Clear();
+        AllSpools.Clear();
         try
         {
-            foreach (var spool in await _apiService.SpoolApi.FindSpoolSpoolGetAsync())
-            {
-                var filament = new FilamentModel
-                {
-                    Id = spool.Id,
-                    Icon = "dotnet_bot.png",
-                    Name = spool.Filament.Name,
-                    Manufacturer = spool.Filament.Vendor.Name,
-                    Material = spool.Filament.Material,
-                    RemainingWeight = spool.RemainingWeight,
-                    UsedWeight = spool.UsedWeight,
-                    Price = spool.Price,
-                    Location = spool.Location,
-                };
-
-                AllFilaments.Add(filament);
-            }
+            AllSpools = await _apiService.GetSpoolsAsync();
         }
-        catch (Exception e)
+        catch (System.Exception e)
         {
             var bar = Snackbar.Make("Něco se nepovedlo");
             await bar.Show();
@@ -121,8 +107,8 @@ public partial class FilamentListModel : ObservableObject
         OnPropertyChanged(nameof(Filaments));
     }
 
-    public FilamentModel? FindFilament(string code)
+    public Spool? FindSpool(string code)
     {
-        return AllFilaments.FirstOrDefault(f => f.Id.ToString() == code);
+        return AllSpools.FirstOrDefault(f => f.Id.ToString() == code);
     }
 }

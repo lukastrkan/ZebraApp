@@ -1,28 +1,91 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+﻿<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:ui="clr-namespace:ZebraApp.UI"
              xmlns:viewModel="clr-namespace:ZebraApp.ViewModel"
              HideSoftInputOnTapped="True"
              x:Class="ZebraApp.MainPage">
 
-    <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Filtr" Clicked="OnToolbarItemClicked"></ToolbarItem>
-    </ContentPage.ToolbarItems>
+    <StackLayout>
+        <!-- Horizontální CollectionView pro výběr filtru -->
+        <ScrollView Orientation="Horizontal"
+                    VerticalOptions="Start"
+                    HorizontalOptions="Center"
+                    VerticalScrollBarVisibility="Never"
+                    HorizontalScrollBarVisibility="Never"
+                    BackgroundColor="Transparent" x:DataType="viewModel:FilamentListModel">
+            <HorizontalStackLayout Spacing="10"
+                                   RadioButtonGroup.GroupName="FilterCategories"
+                                   RadioButtonGroup.SelectedValue="{Binding Filter, Mode=TwoWay}"
+                                   BindableLayout.ItemsSource="{Binding Filters}">
+                <BindableLayout.ItemTemplate>
+                    <DataTemplate x:DataType="viewModel:Filter">
+                        <RadioButton x:Name="RadioFilter" Content="{Binding Name}" Value="{Binding .}">
+                            <RadioButton.ControlTemplate>
+                                <ControlTemplate>
+                                    <Grid HorizontalOptions="FillAndExpand">
+                                        <VisualStateManager.VisualStateGroups>
+                                            <VisualStateGroupList>
+                                                <VisualStateGroup x:Name="CheckedStates">
+                                                    <VisualState x:Name="Checked">
+                                                        <VisualState.Setters>
+                                                            <Setter TargetName="FilterLabel"
+                                                                    Property="Label.TextColor"
+                                                                    Value="White" />
+                                                            <Setter TargetName="ChipBorderView"
+                                                                    Property="Border.Background"
+                                                                    Value="Blue" />
+                                                        </VisualState.Setters>
+                                                    </VisualState>
+                                                    <VisualState x:Name="Unchecked">
+                                                        <VisualState.Setters>
+                                                            <Setter TargetName="FilterLabel"
+                                                                    Property="Label.TextColor"
+                                                                    Value="Gray" />
+                                                            <Setter TargetName="ChipBorderView"
+                                                                    Property="Border.Background"
+                                                                    Value="LightGray" />
+                                                        </VisualState.Setters>
+                                                    </VisualState>
+                                                </VisualStateGroup>
+                                            </VisualStateGroupList>
+                                        </VisualStateManager.VisualStateGroups>
+                                        <Border StrokeThickness="0"
+                                                x:Name="ChipBorderView"
+                                                HeightRequest="35"
+                                                WidthRequest="90">
+                                            <Border.StrokeShape>
+                                                <RoundRectangle CornerRadius="25" />
+                                            </Border.StrokeShape>
+                                            <Label Text="{TemplateBinding Content}"
+                                                   x:Name="FilterLabel"
+                                                   HorizontalTextAlignment="Center"
+                                                   VerticalTextAlignment="Center"
+                                                   FontFamily="RalewayRegular"
+                                                   FontSize="16" />
+                                        </Border>
+                                    </Grid>
+                                </ControlTemplate>
+                            </RadioButton.ControlTemplate>
+                        </RadioButton>
+                    </DataTemplate>
+                </BindableLayout.ItemTemplate>
+            </HorizontalStackLayout>
+        </ScrollView>
 
-    <RefreshView IsRefreshing="{Binding IsRefreshing}"
-                 Command="{Binding RefreshCommand}" x:DataType="viewModel:FilamentListModel">
-        <CollectionView ItemsSource="{Binding Filaments}" SelectionMode="Single" EmptyView="No filaments found"
-                        SelectionChanged="OnFilamentSelected">
-            <CollectionView.ItemTemplate>
-                <DataTemplate x:DataType="viewModel:FilamentModel">
-                    <ui:FilamentItem IconSource="{Binding Icon}"
-                                     Name="{Binding Name}"
-                                     Manufacturer="{Binding Manufacturer}"
-                                     Material="{Binding Material}" />
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
-    </RefreshView>
+        <!-- RefreshView -->
+        <RefreshView IsRefreshing="{Binding IsRefreshing}"
+                     Command="{Binding RefreshCommand}" x:DataType="viewModel:FilamentListModel">
+            <CollectionView ItemsSource="{Binding Filaments}" SelectionMode="Single" EmptyView="No filaments found"
+                            SelectionChanged="OnFilamentSelected">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="viewModel:Spool">
+                        <ui:FilamentItem IconSource="spool.png"
+                                         Name="{Binding Filament.Name}"
+                                         Manufacturer="{Binding Filament.Vendor.Name}"
+                                         Material="{Binding Filament.Material}" />
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </RefreshView>
+    </StackLayout>
 </ContentPage>

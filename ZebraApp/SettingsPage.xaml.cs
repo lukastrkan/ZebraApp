@@ -1,13 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Mvvm.Messaging;
-using ZebraApp.Api.Model;
 using ZebraApp.Entity;
 using ZebraApp.Services;
+using ZebraApp.Utils;
 
 namespace ZebraApp;
 
@@ -20,7 +15,7 @@ public partial class SettingsPage : ContentPage
     {
         InitializeComponent();
         LoadSettings();
-        
+
         _apiService = apiService;
     }
 
@@ -35,9 +30,6 @@ public partial class SettingsPage : ContentPage
         Preferences.Set("Url", UrlEntry.Text);
         var toast = Toast.Make("Settings saved");
         toast.Show();
-        
-        //Reload settings
-        _apiService.Configure();
 
         WeakReferenceMessenger.Default.Send<Message<bool>>(new Message<bool>(MessageType.SETTINGS, true));
     }

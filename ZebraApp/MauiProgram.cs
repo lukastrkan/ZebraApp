@@ -1,8 +1,8 @@
-﻿using CommunityToolkit.Maui;
-using Microsoft.Extensions.DependencyInjection.Extensions;
+﻿using Android.App;
+using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
-using ZebraApp.Api.Api;
 using ZebraApp.Services;
+using ZebraApp.Utils;
 using ZebraApp.ViewModel;
 
 namespace ZebraApp;
@@ -24,7 +24,7 @@ public static class MauiProgram
 
         var task = FileSystem.OpenAppPackageFileAsync("config.env");
         task.Wait();
-        
+
         DotNetEnv.Env.Load(task.Result);
         var sentryDsn = Environment.GetEnvironmentVariable("SENTRY_DSN");
         if (sentryDsn is not null)
@@ -35,19 +35,20 @@ public static class MauiProgram
                 options.Debug = true;
                 options.TracesSampleRate = 1.0;
             });
-            
+
             Console.WriteLine($"Sentry enabled with DSN: {sentryDsn}");
         }
 
-        builder.Services.AddSingleton<ApiService>();
-        builder.Services.AddTransient<FilamentListModel>();
-        builder.Services.AddTransient<MainPage>();
-        builder.Services.AddTransient<BarcodeScannerUtil>();
+        builder.Services.AddTransient<ApiService>()
+            .AddTransient<FilamentListModel>()
+            .AddTransient<MainPage>()
+            .AddTransient<MoveFilamentView>()
+            .AddTransient<BarcodeScannerUtil>();
 
         Microsoft.Maui.Handlers.EntryHandler.Mapper.AppendToMapping("NoKeyboardEntry", ((handler, entry) =>
         {
 #if ANDROID
-            //handler.PlatformView.ShowSoftInputOnFocus = false;
+            handler.PlatformView.ShowSoftInputOnFocus = false;
 #endif
         }));
 

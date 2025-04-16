@@ -4,13 +4,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewModel="clr-namespace:ZebraApp.ViewModel"
              x:Class="ZebraApp.FilamentDetailPage"
-             x:DataType="viewModel:FilamentModel"
-             Title="{Binding Name}">
-    
+             x:DataType="viewModel:Spool"
+             Title="{Binding Filament.Name}">
+
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Přesunout" Clicked="MenuItem_OnClicked"/>
+        <ToolbarItem Text="Přesunout" Clicked="MenuItem_OnClicked" />
     </ContentPage.ToolbarItems>
-    
+
     <Grid Padding="20" RowSpacing="10" ColumnSpacing="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -27,13 +27,13 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <Image Grid.Row="0" Grid.ColumnSpan="2" Source="{Binding Icon}" HeightRequest="120" HorizontalOptions="Center" />
+        <Image Grid.Row="0" Grid.ColumnSpan="2" Source="spool.png" HeightRequest="120" HorizontalOptions="Center" />
 
         <Label Grid.Row="1" Grid.Column="0" Text="Material:" FontAttributes="Bold" />
-        <Label Grid.Row="1" Grid.Column="1" Text="{Binding Material}" />
+        <Label Grid.Row="1" Grid.Column="1" Text="{Binding Filament.Material}" />
 
         <Label Grid.Row="2" Grid.Column="0" Text="Weight:" FontAttributes="Bold" />
-        <Label Grid.Row="2" Grid.Column="1" Text="{Binding Weight}" />
+        <Label Grid.Row="2" Grid.Column="1" Text="{Binding RemainingWeight}" />
 
         <Label Grid.Row="3" Grid.Column="0" Text="Remaining Weight:" FontAttributes="Bold" />
         <Label Grid.Row="3" Grid.Column="1" Text="{Binding RemainingWeight}" />
@@ -41,13 +41,7 @@
         <Label Grid.Row="4" Grid.Column="0" Text="Used Weight:" FontAttributes="Bold" />
         <Label Grid.Row="4" Grid.Column="1" Text="{Binding UsedWeight}" />
 
-        <Label Grid.Row="5" Grid.Column="0" Text="Price:" FontAttributes="Bold" />
-        <Label Grid.Row="5" Grid.Column="1" Text="{Binding Price}" />
-
         <Label Grid.Row="6" Grid.Column="0" Text="Manufacturer:" FontAttributes="Bold" />
-        <Label Grid.Row="6" Grid.Column="1" Text="{Binding Manufacturer}" />
-
-        <Label Grid.Row="7" Grid.Column="0" Text="Scanned:" FontAttributes="Bold" />
-        <Label Grid.Row="7" Grid.Column="1" Text="{Binding Scanned}" />
+        <Label Grid.Row="6" Grid.Column="1" Text="{Binding Filament.Vendor.Name}" />
     </Grid>
 </ContentPage>

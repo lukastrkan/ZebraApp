@@ -8,13 +8,13 @@ namespace ZebraApp;
 
 public partial class MainPage : ContentPage
 {
-    private FilamentListModel FilamentListModel { get; set; }
-    private FilamentModel? SelectedFilament { get; set; }
+    private FilamentListModel? FilamentListModel { get; set; }
+    private Spool? SelectedSpool { get; set; }
 
     public MainPage(FilamentListModel model)
     {
         InitializeComponent();
-
+        
         BindingContext = model;
         FilamentListModel = model;
 
@@ -24,29 +24,26 @@ public partial class MainPage : ContentPage
             {
                 if (Shell.Current.CurrentPage is FilamentDetailPage)
                 {
-                    MainThread.InvokeOnMainThreadAsync(async () =>
-                    {
-                        await Navigation.PopToRootAsync(false);
-                    });
+                    MainThread.InvokeOnMainThreadAsync(async () => { await Navigation.PopToRootAsync(false); });
                 }
-                
-                FilamentListModel.Location = message.Data;
+
+                FilamentListModel.Filter = FilamentListModel.Filters.FirstOrDefault(f => f.Name == message.Data || f.FilterValue == message.Data);
                 return;
             }
 
             if (message.Type == MessageType.FILAMENT)
             {
-                SelectedFilament = FilamentListModel.FindFilament(message.Data);
-                if (SelectedFilament is null) return;
-                
+                SelectedSpool = FilamentListModel.FindSpool(message.Data);
+                if (SelectedSpool is null) return;
+
                 MainThread.InvokeOnMainThreadAsync(async () =>
                 {
                     if (Shell.Current.CurrentPage is FilamentDetailPage)
                     {
                         await Navigation.PopToRootAsync(false);
                     }
-                    
-                    await Navigation.PushAsync(new FilamentDetailPage(SelectedFilament), false);
+
+                    await Navigation.PushAsync(new FilamentDetailPage(SelectedSpool), false);
                 });
             }
         });
@@ -54,21 +51,10 @@ public partial class MainPage : ContentPage
 
     private async void OnFilamentSelected(object sender, SelectionChangedEventArgs e)
     {
-        if (e.CurrentSelection.FirstOrDefault() is FilamentModel filament)
+        if (e.CurrentSelection.FirstOrDefault() is Spool spool)
         {
-            await Navigation.PushAsync(new FilamentDetailPage(filament));
+            await Navigation.PushAsync(new FilamentDetailPage(spool));
             ((CollectionView)sender).SelectedItem = null;
-        }
-    }
-
-    private async void OnToolbarItemClicked(object sender, EventArgs e)
-    {
-        string action =
-            await DisplayActionSheet("Vyberte možnost", "Zrušit", null, FilamentListModel.Locations.ToArray());
-        if (action != "Zrušit")
-        {
-            var slugHelper = new SlugHelper();
-            FilamentListModel.Location = slugHelper.GenerateSlug(action);
         }
     }
 }

@@ -1,54 +1,64 @@
-using CommunityToolkit.Mvvm.Messaging;
-using ZebraApp.Api.Api;
-using ZebraApp.Api.Client;
-using ZebraApp.Entity;
+using Newtonsoft.Json;
+using RestSharp;
+using ZebraApp.Exception;
+using ZebraApp.ViewModel;
 
-namespace ZebraApp.Services;
+namespace ZebraApp.Utils;
 
 public class ApiService
 {
-    public DefaultApi DefaultApi { get; private set; } = null!;
-    public ExportApi ExportApi { get; private set; } = null!;
-    public ExternalApi ExternalApi { get; private set; } = null!;
-    public FieldApi FieldApi { get; private set; } = null!;
-    public FilamentApi FilamentApi { get; private set; } = null!;
-    public OtherApi OtherApi { get; private set; } = null!;
-    public SettingApi SettingApi { get; private set; } = null!;
-    public SpoolApi SpoolApi { get; private set; } = null!;
-    public VendorApi VendorApi { get; private set; } = null!;
-
-    public ApiService()
+    private async Task<RestClient> GetClient()
     {
-        Configure();
-        WeakReferenceMessenger.Default.Register<Message<bool>>(this, (recipient, message) =>
+        var url = Preferences.Get("Url", null);
+        if (string.IsNullOrEmpty(url))
         {
-            if (message.Type == MessageType.SETTINGS)
-            {
-                Configure();
-            }
-        });
-    }
-
-    public void Configure()
-    {
-        var path = Preferences.Get("Url", "localhost");
-        if (string.IsNullOrEmpty(path))
-        {
-            path = "localhost";
+            throw new MissingUrlException();
         }
 
-        var config = new Configuration
+        var options = new RestClientOptions(url);
+        return new RestClient(options);
+    }
+
+    public async Task<bool> ChangeSpoolLocationAsync(int spoolId, string location)
+    {
+        var client = await GetClient();
+        var request = new RestRequest($"spool/{spoolId}", Method.Patch)
+            .AddHeader("Content-Type", "application/json")
+            .AddJsonBody(new { location });
+
+        RestResponse response = await client.ExecuteAsync(request);
+
+        return response.IsSuccessful;
+    }
+
+    public async Task<List<Spool>> GetSpoolsAsync()
+    {
+        var client = await GetClient();
+        var request = new RestRequest("spool", Method.Get);
+
+        RestResponse response = await client.ExecuteAsync(request);
+        if (response.IsSuccessful)
         {
-            BasePath = path
+            if (response?.Content != null)
+            {
+                var spools = JsonConvert.DeserializeObject<List<Spool>>(response.Content);
+                if (spools is not null)
+                {
+                    return spools;
+                }
+            }
+        }
+
+        return new List<Spool>();
+    }
+
+    public async Task<List<string>> GetSpoolLocationsAsync()
+    {
+        return new List<string>
+        {
+            "Vše", "Police", "Tiskárna" 
         };
-        DefaultApi = new DefaultApi(config);
-        ExportApi = new ExportApi(config);
-        ExternalApi = new ExternalApi(config);
-        FieldApi = new FieldApi(config);
-        FilamentApi = new FilamentApi(config);
-        OtherApi = new OtherApi(config);
-        SettingApi = new SettingApi(config);
-        SpoolApi = new SpoolApi(config);
-        VendorApi = new VendorApi(config);
+        
+        //TODO: Add all locations to API and fetch it here
     }
 }

@@ -19,7 +19,7 @@ public class MainActivity : MauiAppCompatActivity
     protected override void OnPostCreate(Bundle? savedInstanceState)
     {
         base.OnPostCreate(savedInstanceState);
-        
+
         var filter = new IntentFilter();
         filter.AddAction("kupshop");
 
