@@ -53,7 +53,7 @@ public partial class MainPage : ContentPage
     {
         if (e.CurrentSelection.FirstOrDefault() is Spool spool)
         {
-            await Navigation.PushAsync(new FilamentDetailPage(spool));
+            await Navigation.PushAsync(new FilamentDetailPage(spool), false);
             ((CollectionView)sender).SelectedItem = null;
         }
     }
