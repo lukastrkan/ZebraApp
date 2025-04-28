@@ -1,10 +1,9 @@
 using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Mvvm.Messaging;
 using ZebraApp.Entity;
-using ZebraApp.Services;
 using ZebraApp.Utils;
 
-namespace ZebraApp;
+namespace ZebraApp.View;
 
 public partial class SettingsPage : ContentPage
 {

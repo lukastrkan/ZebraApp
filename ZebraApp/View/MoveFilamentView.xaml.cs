@@ -1,11 +1,10 @@
 using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Mvvm.Messaging;
 using ZebraApp.Entity;
-using ZebraApp.Services;
 using ZebraApp.Utils;
 using ZebraApp.ViewModel;
 
-namespace ZebraApp;
+namespace ZebraApp.View;
 
 public partial class MoveFilamentView : ContentPage
 {

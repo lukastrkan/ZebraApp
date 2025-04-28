@@ -3,7 +3,7 @@
              xmlns:ui="clr-namespace:ZebraApp.UI"
              xmlns:viewModel="clr-namespace:ZebraApp.ViewModel"
              HideSoftInputOnTapped="True"
-             x:Class="ZebraApp.MainPage">
+             x:Class="ZebraApp.View.MainPage">
 
     <StackLayout>
         <!-- Horizontální CollectionView pro výběr filtru -->

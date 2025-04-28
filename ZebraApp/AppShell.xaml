@@ -5,6 +5,7 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:ZebraApp"
+    xmlns:view="clr-namespace:ZebraApp.View"
     FlyoutBehavior="Disabled"
     TabBarIsVisible="True"
     Title="ZebraApp">
@@ -14,12 +15,12 @@
             Title="Domů"
             Icon="list.png"
             Route="MainPage"
-            ContentTemplate="{DataTemplate local:MainPage}" />
+            ContentTemplate="{DataTemplate view:MainPage}" />
 
         <ShellContent Title="Nastavení"
                       Route="SettingsPage"
                       Icon="settings.png"
-                      ContentTemplate="{DataTemplate local:SettingsPage}" />
+                      ContentTemplate="{DataTemplate view:SettingsPage}" />
     </TabBar>
 
 </Shell>

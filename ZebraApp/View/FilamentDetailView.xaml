@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModel="clr-namespace:ZebraApp.ViewModel"
+             x:Class="ZebraApp.View.FilamentDetailPage"
+             x:DataType="viewModel:Spool"
+             Title="{Binding Filament.Name}">
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Přesunout" Clicked="MenuItem_OnClicked" />
+    </ContentPage.ToolbarItems>
+
+    <ScrollView>
+        <Grid Padding="20" RowSpacing="10" ColumnSpacing="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Image Grid.Row="0" Grid.ColumnSpan="2" Source="spool.png" HeightRequest="120" HorizontalOptions="Center" />
+
+            <Label Grid.Row="1" Grid.Column="0" Text="ID:" FontAttributes="Bold" />
+            <Label Grid.Row="1" Grid.Column="1" Text="{Binding Id}" />
+
+            <Label Grid.Row="2" Grid.Column="0" Text="Registered:" FontAttributes="Bold" />
+            <Label Grid.Row="2" Grid.Column="1" Text="{Binding Registered}" />
+
+            <Label Grid.Row="3" Grid.Column="0" Text="Material:" FontAttributes="Bold" />
+            <Label Grid.Row="3" Grid.Column="1" Text="{Binding Filament.Material}" />
+
+            <Label Grid.Row="4" Grid.Column="0" Text="Vendor:" FontAttributes="Bold" />
+            <Label Grid.Row="4" Grid.Column="1" Text="{Binding Filament.Vendor.Name}" />
+
+            <Label Grid.Row="5" Grid.Column="0" Text="Initial Weight:" FontAttributes="Bold" />
+            <Label Grid.Row="5" Grid.Column="1" Text="{Binding InitialWeight}" />
+
+            <Label Grid.Row="6" Grid.Column="0" Text="Spool Weight:" FontAttributes="Bold" />
+            <Label Grid.Row="6" Grid.Column="1" Text="{Binding SpoolWeight}" />
+
+            <Label Grid.Row="7" Grid.Column="0" Text="Remaining Weight:" FontAttributes="Bold" />
+            <Label Grid.Row="7" Grid.Column="1" Text="{Binding RemainingWeight}" />
+
+            <Label Grid.Row="8" Grid.Column="0" Text="Used Weight:" FontAttributes="Bold" />
+            <Label Grid.Row="8" Grid.Column="1" Text="{Binding UsedWeight}" />
+
+            <Label Grid.Row="9" Grid.Column="0" Text="Remaining Length:" FontAttributes="Bold" />
+            <Label Grid.Row="9" Grid.Column="1" Text="{Binding RemainingLength}" />
+
+            <Label Grid.Row="10" Grid.Column="0" Text="Used Length:" FontAttributes="Bold" />
+            <Label Grid.Row="10" Grid.Column="1" Text="{Binding UsedLength}" />
+
+            <Label Grid.Row="11" Grid.Column="0" Text="Location:" FontAttributes="Bold" />
+            <Label Grid.Row="11" Grid.Column="1" Text="{Binding Location}" />
+
+            <Label Grid.Row="12" Grid.Column="0" Text="Archived:" FontAttributes="Bold" />
+            <Label Grid.Row="12" Grid.Column="1" Text="{Binding Archived}" />
+
+            <Label Grid.Row="13" Grid.Column="0" Text="Extra Data:" FontAttributes="Bold" />
+            <Label Grid.Row="13" Grid.Column="1" Text="{Binding Extra.Count}" />
+
+        </Grid>
+    </ScrollView>
+</ContentPage>

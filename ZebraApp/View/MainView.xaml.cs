@@ -1,10 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.Messaging;
-using Slugify;
 using ZebraApp.Entity;
-using ZebraApp.Services;
 using ZebraApp.ViewModel;
 
-namespace ZebraApp;
+namespace ZebraApp.View;
 
 public partial class MainPage : ContentPage
 {

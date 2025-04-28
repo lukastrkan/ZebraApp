@@ -1,9 +1,6 @@
-using CommunityToolkit.Maui.Views;
-using CommunityToolkit.Mvvm.Messaging;
-using ZebraApp.Entity;
 using ZebraApp.ViewModel;
 
-namespace ZebraApp;
+namespace ZebraApp.View;
 
 public partial class FilamentDetailPage : ContentPage
 {

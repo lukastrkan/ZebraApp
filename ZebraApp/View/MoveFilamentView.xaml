@@ -3,7 +3,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewModel="clr-namespace:ZebraApp.ViewModel"
-             x:Class="ZebraApp.MoveFilamentView" x:DataType="viewModel:Spool">
+             x:Class="ZebraApp.View.MoveFilamentView" x:DataType="viewModel:Spool">
     <ContentPage.Content>
         <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="20">
             <Image Source="scan_filament.png" HeightRequest="120" />

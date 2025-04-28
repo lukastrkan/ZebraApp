@@ -74,5 +74,39 @@
         <PackageReference Include="Microsoft.Maui.Controls" Version="9.0.50" />
     </ItemGroup>
 
+    <ItemGroup>
+      <MauiXaml Update="View\FilamentDetailView.xaml">
+        <SubType>Designer</SubType>
+      </MauiXaml>
+      <MauiXaml Update="View\MainView.xaml">
+        <SubType>Designer</SubType>
+      </MauiXaml>
+      <MauiXaml Update="View\SettingsView.xaml">
+        <SubType>Designer</SubType>
+      </MauiXaml>
+      <MauiXaml Update="View\MoveFilamentView.xaml">
+        <SubType>Designer</SubType>
+      </MauiXaml>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="View\FilamentDetailView.xaml.cs">
+        <DependentUpon>FilamentDetailView.xaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="View\MainView.xaml.cs">
+        <DependentUpon>MainView.xaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="View\SettingsView.xaml.cs">
+        <DependentUpon>SettingsView.xaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="View\MoveFilamentView.xaml.cs">
+        <DependentUpon>MoveFilamentView.xaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+    </ItemGroup>
+
     
 </Project>
